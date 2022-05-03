@@ -4,7 +4,7 @@
 // @author         Fabio "Blacklight" Manganiello
 // @version        1.0
 // @grant          none
-// @include        https://www.ultimate-guitar.com/user/mytabs
+// @match          https://www.ultimate-guitar.com/user/mytabs
 // ==/UserScript==
 
 /**
