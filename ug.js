@@ -21,55 +21,52 @@
 
 
 function getTabs() {
-    let artist = null;
-    return [
-        ...document.querySelector('article[isdesktop=true] div').childNodes
-    ].slice(1).map(item => {
-        const childNodes = [...item.childNodes];
-        const parsedItem = {};
+  let artist = null;
+  return [
+    ...document.querySelector('article[isdesktop=true] div').childNodes
+  ].slice(1).map(item => {
+    const childNodes = [...item.childNodes];
+    const parsedItem = {};
 
-        if (childNodes.length > 0) {
-            const cellContent = childNodes[0].innerText.trim();
-            if (cellContent.length)
-                artist = cellContent;
-        }
+    if (childNodes.length > 0) {
+      const cellContent = childNodes[0].innerText.trim();
+      if (cellContent.length)
+        artist = cellContent;
+    }
 
-        if (childNodes.length > 1) {
-            const cellContent = childNodes[1].innerText.trim();
-            if (cellContent.length)
-                parsedItem.title = cellContent;
+    if (childNodes.length > 1) {
+      const cellContent = childNodes[1].innerText.trim();
+      if (cellContent.length)
+        parsedItem.title = cellContent;
 
-            const link = childNodes[1].querySelector('a').getAttribute('href');
-            if (link.length)
-                parsedItem.link = link;
-        }
+      const link = childNodes[1].querySelector('a').getAttribute('href');
+      if (link.length)
+        parsedItem.link = link;
+    }
 
-        if (!artist && parsedItem.title)
-            return;
+    if (!artist && parsedItem.title)
+      return;
 
-        parsedItem.artist = artist;
-        return parsedItem;
-    }).filter(item => item)
-}
-
-function downloadTabs() {
-    const tabs = getTabs();
-    window.open('data:application/json,' + encodeURIComponent(JSON.stringify(tabs)));
+    parsedItem.artist = artist;
+    return parsedItem;
+  }).filter(item => item)
 }
 
 function addDownloadButton() {
-    const header = document.querySelector('main section header');
-    if (!header)
-        return;
+  const header = document.querySelector('main section header');
+  if (!header)
+    return;
 
-    if (header.querySelector('button.__download-btn'))
-        return;
+  if (header.querySelector('button.__download-btn'))
+    return;
 
-    const btn = document.createElement('button');
-    btn.classList.add('__download-btn');
-    btn.innerText = 'Download as JSON';
-    btn.onclick = downloadTabs;
-    header.querySelector('section').appendChild(btn);
+  const tabs = 'data:application/json,' + encodeURIComponent(JSON.stringify(getTabs()));
+  const btn = document.createElement('a');
+  btn.download = 'tabs.json';
+  btn.innerHTML = 'Download tabs as JSON';
+  btn.style = 'color: #ffc600; text-decoration: underline';
+  btn.href = tabs;
+  header.querySelector('section').appendChild(btn);
 }
 
 window.onload = addDownloadButton;
