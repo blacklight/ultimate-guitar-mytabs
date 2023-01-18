@@ -20,6 +20,8 @@
  */
 
 
+let downloadButtonPoll = null
+
 function getTabs() {
   let artist = null;
   return [
@@ -57,7 +59,12 @@ function addDownloadButton() {
   if (!header)
     return;
 
-  if (header.querySelector('button.__download-btn'))
+  if (downloadButtonPoll) {
+    clearInterval(downloadButtonPoll);
+    downloadButtonPoll = null;
+  }
+
+  if (header.querySelector('a.__download-btn'))
     return;
 
   const tabs = 'data:application/json,' + encodeURIComponent(JSON.stringify(getTabs()));
@@ -66,8 +73,11 @@ function addDownloadButton() {
   btn.innerHTML = 'Download tabs as JSON';
   btn.style = 'color: #ffc600; text-decoration: underline';
   btn.href = tabs;
+  btn.className = '__download-btn';
   header.querySelector('section').appendChild(btn);
 }
 
-window.onload = addDownloadButton;
+window.onload = () => {
+  downloadButtonPoll = setInterval(addDownloadButton, 1000);
+}
 
